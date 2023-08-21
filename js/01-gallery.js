@@ -1,59 +1,53 @@
-import { galleryItems } from './gallery-items.js';
-// Change code below this line
+import { galleryItems } from "./gallery-items.js";
 
-console.log(galleryItems);
-import * as basicLightbox from 'basiclightbox';
-import 'basiclightbox/dist/basicLightbox.min.css';
+const container = document.querySelector(" .gallery");
 
-const galleryItems = [
-  {
-    preview: 'small-image1.jpg',
-    original: 'large-image1.jpg',
-    description: 'Image 1',
-  },
-  {
-    preview: 'small-image2.jpg',
-    original: 'large-image2.jpg',
-    description: 'Image 2',
-  },
-  // Другие элементы галереи...
-];
+function createMarcup(arr) {
+  return arr
+    .map(
+      ({ preview, original, description }) =>
+        `<li class ="gallery__item">
+     <a class="gallery__link" href="${original}">
+     <img class="gallery__image"
+      src="${preview}"
+        data-source="${original}"
+        alt="${description}"
+      />
+      </a>
+   </li>`
+    )
+    .join(""); //Обьединяет все эл массива в строку.
+}
+container.insertAdjacentHTML("beforeend", createMarcup(galleryItems));
 
-const galleryList = document.querySelector('.gallery');
+container.addEventListener("click", handlerClicker);
 
-const createGalleryItem = ({ preview, original, description }) => {
-  const listItem = document.createElement('li');
-  listItem.classList.add('gallery__item');
-
-  const link = document.createElement('a');
-  link.classList.add('gallery__link');
-  link.href = original;
-
-  const image = document.createElement('img');
-  image.classList.add('gallery__image');
-  image.src = preview;
-  image.alt = description;
-  image.dataset.source = original;
-
-  link.appendChild(image);
-  listItem.appendChild(link);
-
-  return listItem;
-};
-
-const galleryElements = galleryItems.map(createGalleryItem);
-galleryList.append(...galleryElements);
-
-galleryList.addEventListener('click', event => {
-  event.preventDefault();
-
-  if (event.target.tagName !== 'IMG') return;
-
-  const largeImageUrl = event.target.dataset.source;
+function handlerClicker(evt) {
+  evt.preventDefault();
+  if (evt.target === evt.currentTarget) {
+    return;
+  }
+  console.log(evt.target.dataset.source);
 
   const instance = basicLightbox.create(`
-    <img src="${largeImageUrl}" width="800" height="600">
-  `);
-
+    <img src="${evt.target.dataset.source}">
+`);
   instance.show();
-});
+}
+
+console.log(basicLightbox);
+
+// Change code below this line
+
+// const galleryItems = [
+//     {
+// //small
+// preview:
+//   "https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820__480.jpg",
+// // big
+// original:
+//   "https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820_1280.jpg",
+// description: "Hokkaido Flower",
+//     },
+// ---------------------------------------------------------------
+// --------------------------------------------- -----------------------
